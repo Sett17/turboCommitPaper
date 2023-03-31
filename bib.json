@@ -1,0 +1,3 @@
+[
+  {"id":"settTurbocommit2023","abstract":"turbocommit is a Rust-based CLI tool that generates high-quality git commit messages in accordance with the Conventional Commits specification, using OpenAI's `gpt-3.5-turbo` language model. It is easy to use and a cost-effective way to keep git commit history at a higher quality, helping developers stay on track with their work.","accessed":{"date-parts":[[2023,3,31]]},"author":[{"family":"Sett","given":""}],"citation-key":"settTurbocommit2023","genre":"Rust","issued":{"date-parts":[[2023,3,31]]},"license":"MIT","original-date":{"date-parts":[[2023,3,5]]},"source":"GitHub","title":"turbocommit","type":"software","URL":"https://github.com/Sett17/turboCommit"}
+]
