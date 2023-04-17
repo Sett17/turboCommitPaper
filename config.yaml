@@ -2,7 +2,7 @@ text:
     fontSize: 11
     lineHeight: 1.2
     listLineHeight: 1
-    listMarker: •
+    listMarker: '-'
     figureText: Figure
 page:
     marginTop: 20
@@ -23,23 +23,23 @@ tof:
     fontSize: 12
     heading: Table of Figures
 margins:
-    paragraph: 2
+    paragraph: 1
     heading_top: 3
     heading_bottom: 1
-    list: 2
+    list: 1
     image: 4
     code: 2
 paper:
-    title: Does AI write better commit message than Developers?
-    authors: Raik Rohde
+    title: turbocommit
+    authors: Raik Rohde 4380676, Atos Information GmbH
     debug: false
 citation:
-    enabled: false
+    enabled: true
     file: bib.json
     heading: References
     bibFontSize: 12
     bibLineHeight: 1.4
-    csl: ""
+    csl: chicago-author-date.csl
     locale: ""
 code:
     style: dracula
@@ -51,4 +51,4 @@ table:
     padding: 1.5
 cover:
     enabled: true
-    subtitle: A comparative analysis of the quality of AI-generated commit messages and manually written messages by developers.
+    subtitle: A Case Study in Applying Al to Streamline the Software Development Process
