@@ -1,5 +1,4 @@
 mdpaper\
- abstract.md\
  intro.md\
  theory.md\
  method.md\
