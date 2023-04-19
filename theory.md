@@ -102,11 +102,22 @@ In this evaluation metric, the adherence to the spec is measured as a binary sco
 ### Readability
 
 To assess the readability of commit messages, two aspects will be evaluated: the title and the body.
-<!-- das ganze genauer schreiben wenn ich wirklich weiß wie ick dat mache -->
-Natural Language Processing (NLP) techniques will be employed to determine if the title is likely to be a proper sentence and written in the present tense.
-A readability metric, such as the Flesch Reading Ease or Gunning Fog Index, will be used to determine a readability score for the body, which should ideally be easy to read.
-Both the title and body evaluations will result in individual scores between 0 and 1.
-These scores will then be combined with equal weight (50/50) to generate a final readability score, also ranging from 0 to 1.
+
+For evaluating the title, we will use Natural Language Processing (NLP) techniques, specifically Part-of-Speech (POS) tagging [@honnibalSpaCyIndustrialstrengthNatural2020].
+POS tagging helps us identify the grammatical structure of the title and determine if it is a proper sentence written in the present tense.
+If the title is detected to be a correct sentence and written in the present tense, it will be assigned a score of 1, otherwise it will be assigned a score of 0.
+
+For the body of the commit message, the Flesch Reading Ease Score (FRES) [@fleschHowWritePlain2016] is used, to measure the readability of the text.
+FRES is a widely used readability metric that assesses the complexity of the text based on the number of words, sentences, and syllables.
+The score ranges from 0 to 100, with higher scores indicating greater readability.
+
+Since our goal is to have commit messages that are easy to read, we will normalize the FRES scores to a range between 0 and 1.
+We will set a target FRES score of 65 as the upper limit, considering it to be easy enough to read for our purpose.
+To normalize the FRES scores, any score of 65 or above will be assigned a value of 1, while a score of 0 will remain 0.
+Scores in between will be linearly interpolated within the 0 to 1 range.
+
+To calculate the overall readability score, both the title and body scores will be combined with equal weight.
+If a commit message does not have a body, only the title score will be used for the overall readability score.
 
 ### Accuracy
 
