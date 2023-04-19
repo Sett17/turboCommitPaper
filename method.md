@@ -15,3 +15,5 @@ Commit messages authored by bots or merge commits were filtered out and placed i
 From the three repositories using Conventional Commits, slightly more than 100 non-filtered commits were collected for each (103 from taxonomy, 110 from demo-projects, and 127 from resume).
 To maintain a balanced evaluation, only 113 random commits from kotlin-faker were included.
 This approach ensures that the overall evaluation is not disproportionately influenced by the kotlin-faker repository.
+
+## Implementation
