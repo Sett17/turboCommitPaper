@@ -11,3 +11,9 @@ extractor/kotlin-faker.db
 extractor/resume.db
 extractor/spectator.db
 extractor/taxonomy.db
+evaluator/.termdbms
+venv
+evaluator/taxonomy.db
+evaluator/resume.db
+evaluator/kotlin-faker.db
+evaluator/demo-projects.db
