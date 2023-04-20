@@ -5,10 +5,6 @@ from git import Repo
 from git import Git
 from tqdm import tqdm
 
-# def is_bot_commit(commit):
-#     author_name = commit.author.name.lower()
-#     return "bot" in author_name
-
 def is_bot_commit(commit):
     author_name = commit.author.name.lower()
     message = commit.message.lower()
@@ -17,7 +13,6 @@ def is_bot_commit(commit):
         or "snyk" in author_name
         or "merge" in message
     )
-
 
 def clone_repository(repo_url, local_path):
     if not os.path.exists(local_path):
