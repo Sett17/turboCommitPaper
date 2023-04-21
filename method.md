@@ -17,3 +17,9 @@ To maintain a balanced evaluation, only 113 random commits from kotlin-faker wer
 This approach ensures that the overall evaluation is not disproportionately influenced by the kotlin-faker repository.
 
 ## Implementation
+
+Adapted `turbocommit` implementation to get its data from a temp file and write its output to a temp file, to easily be used in a python script.
+
+## Evaluation
+
+Python scripts
