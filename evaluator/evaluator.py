@@ -101,12 +101,13 @@ def main(database_path: str, reset: bool):
                 flesch_score = evaluate_flesch(parsed_message['body'])
             else:
                 flesch_score = evaluate_flesch(commit[1])
+            readability_score = (pos_score + flesch_score) / 2
         else:
             adherence_score = 0.0
             pos_score = 0.0
             flesch_score = evaluate_flesch(commit[1])
+            readability_score = flesch_score
 
-        readability_score = (pos_score + flesch_score) / 2
         accuracy_score = None
 
         cursor.execute('INSERT INTO evaluated (hash, adherence_score, readability_score, accuracy_score) VALUES (?, ?, ?, ?)',
