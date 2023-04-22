@@ -2,10 +2,10 @@ use colored::Colorize;
 
 use openai::{Message, Model};
 
-use std::{env, process};
+use std::{env, fs::File, io::Write, process};
 
+mod adaptions;
 mod animation;
-mod git;
 mod openai;
 mod util;
 
@@ -16,20 +16,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         process::exit(1);
     };
 
-    let repo = git::get_repo()?;
-
     let system_len = openai::count_token(SYSTEM_MSG).unwrap_or(0);
     let extra_len = 0;
 
-    let (diff, diff_tokens) = util::decide_diff(
-        &repo,
-        system_len + extra_len,
-        Model::Gpt35Turbo.context_size(),
-    )?;
+    let (diff, diff_tokens) =
+        adaptions::diff(system_len + extra_len, Model::Gpt35Turbo.context_size())?;
 
     let prompt_tokens = system_len + extra_len + diff_tokens;
 
-    let mut messages = vec![
+    let messages = vec![
         Message::system(String::from(SYSTEM_MSG)),
         Message::user(diff),
     ];
@@ -38,11 +33,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .execute(api_key, false, Model::Gpt35Turbo, prompt_tokens)
         .await?;
 
-    let mut chosen_message = util::choose_message(choices);
+    let chosen_message = util::choose_message(choices);
 
-    util::user_action(chosen_message)?;
-
-    util::check_version().await;
+    let mut file = File::create("output.txt").unwrap();
+    file.write_all(chosen_message.as_bytes()).unwrap();
+    println!(
+        "{} {}",
+        "Output written to output.txt".green(),
+        "🎉".bright_black()
+    );
 
     Ok(())
 }

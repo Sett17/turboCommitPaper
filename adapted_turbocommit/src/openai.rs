@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 use std::{fmt, process};
 
+
 use crate::animation;
 use crate::util::count_lines;
 
@@ -114,8 +115,12 @@ impl Request {
     ) -> anyhow::Result<Vec<String>> {
         let mut choices = vec![String::new(); self.n as usize];
 
-        let loading_ai_animation =
-            animation::start(String::from("Asking AI..."), no_animations, std::io::stdout()).await;
+        let loading_ai_animation = animation::start(
+            String::from("Asking AI..."),
+            no_animations,
+            std::io::stdout(),
+        )
+        .await;
 
         let json = serde_json::to_string(self)?;
 
