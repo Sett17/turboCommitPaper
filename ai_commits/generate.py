@@ -114,10 +114,10 @@ def main(database_path: str, n: int) -> None:
                 print("adapted_turbocommit finished. Saving AI commit...")
                 output = read_file("output.txt")
                 insert_ai_commit(database_path, hash, output)
+                print(f"AI commit saved for hash {hash}\n")
                 break
 
         delete_files(["diff.txt", "output.txt"])
-        print(f"AI commit saved for hash {hash}\n")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
