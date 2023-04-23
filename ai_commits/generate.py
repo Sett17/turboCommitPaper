@@ -117,7 +117,7 @@ def main(database_path: str, n: int) -> None:
                 break
 
         delete_files(["diff.txt", "output.txt"])
-        print(f"AI commit saved for hash {hash}\n\n")
+        print(f"AI commit saved for hash {hash}\n")
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

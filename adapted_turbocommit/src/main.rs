@@ -38,8 +38,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )));
     }
 
-    println!("{:?}", messages);
-
     let choices = openai::Request::new(Model::Gpt35Turbo.to_string(), messages, 3, 0.78, 0.0)
         .execute(api_key, false, Model::Gpt35Turbo, prompt_tokens)
         .await?;
