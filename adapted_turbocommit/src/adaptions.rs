@@ -27,11 +27,21 @@ pub fn diff(used_tokens: usize, context: usize) -> anyhow::Result<(String, usize
             )
             .bright_black()
         );
-        let selected_files = MultiSelect::new(
+
+        let file_names: Vec<String> = patch.files().iter().map(|file| file.source_file.clone()).collect();
+        let selected_file_names = MultiSelect::new(
             "Select the files you want to include in the diff:",
-            patch.files().to_vec(),
+            file_names,
         )
         .prompt()?;
+
+        let selected_files = selected_file_names.iter().map(|file_name| {
+            patch
+                .files()
+                .iter()
+                .find(|file| file.source_file == *file_name)
+                .unwrap()
+        });
 
         let mut new_contents = String::new();
         for file in selected_files {

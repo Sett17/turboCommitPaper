@@ -51,7 +51,7 @@ pub fn choose_message(choices: Vec<String>) -> String {
     {
         Ok(index) => index,
         Err(_) => {
-            process::exit(0);
+            process::exit(1);
         }
     };
     choices[commit_index].clone()

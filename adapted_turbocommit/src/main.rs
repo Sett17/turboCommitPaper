@@ -16,6 +16,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         process::exit(1);
     };
 
+    let extra = env::args().skip(1).collect::<Vec<String>>().join(" ");
+
     let system_len = openai::count_token(SYSTEM_MSG).unwrap_or(0);
     let extra_len = 0;
 
@@ -24,12 +26,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let prompt_tokens = system_len + extra_len + diff_tokens;
 
-    let messages = vec![
+    let mut messages = vec![
         Message::system(String::from(SYSTEM_MSG)),
         Message::user(diff),
     ];
 
-    let choices = openai::Request::new(Model::Gpt35Turbo.to_string(), messages, 3, 0.8, 0.0)
+    if !extra.trim().is_empty() {
+        messages.push(Message::user(format!(
+            "User Explanation/Instruction: '{}'",
+            extra
+        )));
+    }
+
+    println!("{:?}", messages);
+
+    let choices = openai::Request::new(Model::Gpt35Turbo.to_string(), messages, 3, 0.78, 0.0)
         .execute(api_key, false, Model::Gpt35Turbo, prompt_tokens)
         .await?;
 
@@ -39,7 +50,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     file.write_all(chosen_message.as_bytes()).unwrap();
     println!(
         "{} {}",
-        "Output written to output.txt".green(),
+        "Message written to output.txt".green(),
         "🎉".bright_black()
     );
 
@@ -48,7 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 const SYSTEM_MSG: &str = r#"AI: gen conv commit-msg. Input: git diff staged files, context, user instr. Task: focus purpose, brief, clear. Output: 1 msg (1 headline, ≤1 body) ONLY.
 Commit-msg guidelines:
-1. Start: type (feat, fix, chore, etc.), opt. scope, opt. ! (breaking), req. colon+space.
+1. Start: type (feat, fix, refactor, chore, etc.), opt. scope, opt. ! (breaking), req. colon+space.
 2. feat=new features, fix=bug fixes, etc.
 3. Scope: codebase section, in ().
 4. After type/scope: concise desc, colon+space.
