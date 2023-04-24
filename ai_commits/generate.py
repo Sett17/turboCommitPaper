@@ -13,7 +13,7 @@ def create_ai_commits_table(database_path: str) -> None:
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS ai_commits (
+        CREATE TABLE IF NOT EXISTS ai_commits_one_shot (
             hash TEXT PRIMARY KEY,
             content TEXT
         )
@@ -33,7 +33,7 @@ def get_commits(database_path: str, n: int) -> List[Tuple[str, str, str]]:
     cursor.execute("""
         SELECT hash, message, diff
         FROM commits
-        WHERE hash NOT IN (SELECT hash FROM ai_commits)
+        WHERE hash NOT IN (SELECT hash FROM ai_commits_one_shot)
         ORDER BY RANDOM()
         LIMIT ?
     """, (n,))
@@ -44,7 +44,7 @@ def get_commits(database_path: str, n: int) -> List[Tuple[str, str, str]]:
 def ai_commit_exists(database_path: str, hash: str) -> bool:
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
-    cursor.execute("SELECT COUNT(*) FROM ai_commits WHERE hash = ?", (hash,))
+    cursor.execute("SELECT COUNT(*) FROM ai_commits_one_shot WHERE hash = ?", (hash,))
     count = cursor.fetchone()[0]
     connection.close()
     return count > 0
@@ -69,12 +69,12 @@ def delete_files(filepaths: List[str]) -> None:
 def call_turbocommit(extra_arg: str) -> int:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     executable_path = os.path.join(script_dir, "adapted_turbocommit")
-    return os.system(f"{executable_path} {extra_arg}")
+    return os.system(f"{executable_path} -o {extra_arg}")
 
 def insert_ai_commit(database_path: str, hash: str, content: str) -> None:
     connection = sqlite3.connect(database_path)
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO ai_commits (hash, content) VALUES (?, ?)", (hash, content))
+    cursor.execute("INSERT INTO ai_commits_one_shot (hash, content) VALUES (?, ?)", (hash, content))
     connection.commit()
     connection.close()
 
@@ -92,15 +92,16 @@ def main(database_path: str, n: int) -> None:
         print(message)
         print(separator_line)
 
-        input("Press Enter to view the diff...")
-        display_diff(diff)
+        # input("Press Enter to view the diff...")
+        # display_diff(diff)
 
         while True:
-            extra_arg = input("Enter an extra string for adapted_turbocommit: ")
+            # extra_arg = input("Enter an extra string for adapted_turbocommit: ")
 
             print("Running adapted_turbocommit...")
             save_to_file("diff.txt", diff)
-            exit_code = call_turbocommit(extra_arg)
+            # exit_code = call_turbocommit(extra_arg)
+            exit_code = call_turbocommit("")
 
             if exit_code != 0:
                 print(f"adapted_turbocommit exited with non-zero code: {exit_code}")
