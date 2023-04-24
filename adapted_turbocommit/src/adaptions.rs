@@ -77,12 +77,12 @@ pub fn diff(used_tokens: usize, context: usize) -> anyhow::Result<(String, usize
                 .unwrap()
         });
 
-        let mut new_contents = String::new();
+        contents = String::new();
         for file in selected_files {
-            new_contents.push_str(&file.to_string());
+            contents.push_str(&file.to_string());
         }
 
-        diff_tokens = openai::count_token(&new_contents).unwrap_or(0);
+        diff_tokens = openai::count_token(&contents).unwrap_or(0);
     }
 
     Ok((contents, diff_tokens))

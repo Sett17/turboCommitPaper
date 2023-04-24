@@ -16,7 +16,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         process::exit(1);
     };
 
-    let extra = env::args().skip(1).collect::<Vec<String>>().join(" ");
+    let mut extra = String::new();
+    let mut n = 3;
+    for arg in env::args().skip(1) {
+        match arg.as_str() {
+            "-o" => {
+                n = 1;
+            }
+            _ => {
+                extra.push_str(&arg);
+            }
+        }
+    }
 
     let system_len = openai::count_token(SYSTEM_MSG).unwrap_or(0);
     let extra_len = 0;
@@ -38,11 +49,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )));
     }
 
-    let choices = openai::Request::new(Model::Gpt35Turbo.to_string(), messages, 3, 0.78, 0.0)
+    let choices = openai::Request::new(Model::Gpt35Turbo.to_string(), messages, n, 0.78, 0.0)
         .execute(api_key, false, Model::Gpt35Turbo, prompt_tokens)
         .await?;
 
-    let chosen_message = util::choose_message(choices);
+    let mut chosen_message = String::new();
+    if n == 1 {
+        chosen_message = choices[0].clone();
+    } else {
+        chosen_message = util::choose_message(choices);
+    }
 
     let mut file = File::create("output.txt").unwrap();
     file.write_all(chosen_message.as_bytes()).unwrap();
