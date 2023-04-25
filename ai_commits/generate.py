@@ -65,7 +65,6 @@ def delete_files(filepaths: List[str]) -> None:
         else:
             print(f"File '{filepath}' not found. Skipping deletion.")
 
-
 def call_turbocommit(extra_arg: str) -> int:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     executable_path = os.path.join(script_dir, "adapted_turbocommit")
@@ -77,6 +76,14 @@ def insert_ai_commit(database_path: str, hash: str, content: str) -> None:
     cursor.execute("INSERT INTO ai_commits_one_shot (hash, content) VALUES (?, ?)", (hash, content))
     connection.commit()
     connection.close()
+
+def delete_commit(database_path: str, hash: str) -> None:
+    connection = sqlite3.connect(database_path)
+    cursor = connection.cursor()
+    cursor.execute("DELETE FROM commits WHERE hash = ?", (hash,))
+    connection.commit()
+    connection.close()
+    print(f"Commit with hash {hash} deleted from the commits table")
 
 def main(database_path: str, n: int) -> None:
     create_ai_commits_table(database_path)
@@ -105,10 +112,13 @@ def main(database_path: str, n: int) -> None:
 
             if exit_code != 0:
                 print(f"adapted_turbocommit exited with non-zero code: {exit_code}")
-                retry = click.prompt("Do you want to try again?", type=click.Choice(['y', 'n'], case_sensitive=False), default='y', show_default=True)
+                retry = click.prompt("Do you want to retry, delete the commit, or skip? [R/d/s]", type=click.Choice(['r', 'd', 's'], case_sensitive=False), default='r', show_default=True)
 
-                if retry == 'y':
+                if retry == 'r':
                     continue
+                elif retry == 'd':
+                    delete_commit(database_path, hash)
+                    break
                 else:
                     break
             else:
