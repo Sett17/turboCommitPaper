@@ -41,12 +41,13 @@ pub fn diff(used_tokens: usize, context: usize) -> anyhow::Result<(String, usize
     let mut file = File::open("diff.txt").unwrap();
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
+    let original_contents = contents.clone();
 
     let mut diff_tokens = openai::count_token(&contents).unwrap_or(0);
 
     while diff_tokens + used_tokens > context {
         let mut patch = PatchSet::new();
-        patch.parse(&contents)?;
+        patch.parse(&original_contents)?;
         println!(
             "{} {}",
             "The request is too long!".red(),
@@ -80,6 +81,7 @@ pub fn diff(used_tokens: usize, context: usize) -> anyhow::Result<(String, usize
         contents = String::new();
         for file in selected_files {
             contents.push_str(&file.to_string());
+            contents.push('\n');
         }
 
         diff_tokens = openai::count_token(&contents).unwrap_or(0);
