@@ -122,130 +122,22 @@ If a commit message does not have a body, only the title score will be used for 
 ### Accuracy
 
 Evaluating the accuracy of commit messages is the most challenging aspect of this assessment.
-Since there is no straightforward automated method to measure the accuracy, it will be done manually using a 2D grid rubric.
+Since there is no straightforward automated method to measure the accuracy, it will be done manually using a rubric.
 
-```dot [label="The 2D rubric for evaluating commits"]
-digraph table {
-    rankdir=TB;
-    node [shape=plaintext];
-    node1 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="7">
-      <tr>
-        <td></td>
-        <td>A1</td>
-        <td>A2</td>
-        <td>A3</td>
-        <td>A4</td>
-        <td>A5</td>
-        <td>A6</td>
-      </tr>
-      <tr>
-        <td>D1</td>
-        <td bgcolor="#daf7a6">1.0</td>
-        <td bgcolor="#eddd53">0.9</td>
-        <td bgcolor="#ffc300">0.8</td>
-        <td bgcolor="#ff8d1a">0.7</td>
-        <td bgcolor="#ff5733">0.6</td>
-        <td bgcolor="#e32c36">0.5</td>
-      </tr>
-      <tr>
-        <td>D2</td>
-        <td bgcolor="#eddd53">0.9</td>
-        <td bgcolor="#ffc300">0.8</td>
-        <td bgcolor="#ff8d1a">0.7</td>
-        <td bgcolor="#ff5733">0.6</td>
-        <td bgcolor="#e32c36">0.5</td>
-        <td bgcolor="#c70039">0.4</td>
-      </tr>
-      <tr>
-        <td>D3</td>
-        <td bgcolor="#ffc300">0.8</td>
-        <td bgcolor="#ff8d1a">0.7</td>
-        <td bgcolor="#ff5733">0.6</td>
-        <td bgcolor="#e32c36">0.5</td>
-        <td bgcolor="#c70039">0.4</td>
-        <td bgcolor="#ac063c">0.3</td>
-      </tr>
-      <tr>
-        <td>D4</td>
-        <td bgcolor="#ff8d1a">0.7</td>
-        <td bgcolor="#ff5733">0.6</td>
-        <td bgcolor="#e32c36">0.5</td>
-        <td bgcolor="#c70039">0.4</td>
-        <td bgcolor="#ac063c">0.3</td>
-        <td bgcolor="#900c3f">0.2</td>
-      </tr>
-      <tr>
-        <td>D5</td>
-        <td bgcolor="#ff5733">0.6</td>
-        <td bgcolor="#e32c36">0.5</td>
-        <td bgcolor="#c70039">0.4</td>
-        <td bgcolor="#ac063c">0.3</td>
-        <td bgcolor="#900c3f">0.2</td>
-        <td bgcolor="#741242">0.1</td>
-      </tr>
-      <tr>
-        <td>D6</td>
-        <td bgcolor="#e32c36">0.5</td>
-        <td bgcolor="#c70039">0.4</td>
-        <td bgcolor="#ac063c">0.3</td>
-        <td bgcolor="#900c3f">0.2</td>
-        <td bgcolor="#741242">0.1</td>
-        <td bgcolor="#581845">0.0</td>
-      </tr>
-    </table>>];
-    
-    subgraph cluster_labels {
-        fontcolor = "black";
-        fontsize = 16;
-        peripheries=0
-        
-        node2 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="6">
-          <tr>
-            <td>#</td>
-            <td>A</td>
-            <td>D</td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Fully accurate</td>
-            <td>Covers all changes</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Minor inaccuracies</td>
-            <td>Misses minor details</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Significant inaccuracies</td>
-            <td>Significant portions missing</td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>Numerous inaccuracies</td>
-            <td>Many details missing</td>
-          </tr>
-          <tr>
-            <td>5</td>
-            <td>Little to no accurate information</td>
-            <td>Little to no information provided</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>No accurate information</td>
-            <td>No changes mentioned</td>
-          </tr>
-        </table>>];
-    }
+The rubric for accuracy is as follows:
 
-    node1->node2 [style=invis]
-}
-```
+**1.0**: The commit message accurately and completely describes the changes made in the code.
+
+**0.8**: The commit message accurately describes most of the changes, but misses some minor details.
+
+**0.6**: The commit message describes some of the changes accurately, but significant portions are missing or unclear.
+
+**0.4**: The commit message is only somewhat accurate, with numerous missing or incorrect details.
+
+**0.2**: The commit message barely describes the changes made, with little to no accurate information.
+
+**0.0**: The commit message does not accurately describe the changes at all.
 
 To ensure a fair comparison between human-written and generated commit messages, the evaluation process will be carried out right after studying the changes in the code.
 Both types of commit messages will be scored consecutively, maintaining consistency and minimizing bias in the assessment.
 This approach will help in providing a reliable measure of the accuracy of the described changes within the commit messages.
-
-
-
-
