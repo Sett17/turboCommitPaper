@@ -57,7 +57,8 @@ def main():
         commit_hash = commit.hexsha
         message = commit.message.strip()
         is_bot = is_bot_commit(commit)
-        diff = git.diff(commit.parents[0].hexsha, commit.hexsha) if commit.parents else git.diff(commit.hexsha)
+        # diff = git.diff(commit.parents[0].hexsha, commit.hexsha) if commit.parents else git.diff(commit.hexsha)
+        diff = (git.diff(commit.parents[0].hexsha, commit.hexsha) if commit.parents else git.diff(commit.hexsha)).encode('utf-8', 'replace').decode('utf-8')
         save_commit_data(conn, commit_hash, message, diff, is_bot)
         progress_bar.update(1)
 
